@@ -5,12 +5,14 @@
 #include "utils.h"
 
 void GameConfig::run() {
+
 	ShowConsoleCursor(false);
 	Board board;
 	board.reset();
 	board.print();
 	Hero mario;
 	mario.setBoard(board);
+
 	while (true) {
 		mario.draw();
 		if (_kbhit()) {

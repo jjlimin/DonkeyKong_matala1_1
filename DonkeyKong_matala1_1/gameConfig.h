@@ -13,6 +13,5 @@ public:
 	static constexpr int SLEEP_DURATION = 200;
 
 	void run();
-
 };
 
