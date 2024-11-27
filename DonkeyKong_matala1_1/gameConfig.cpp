@@ -3,6 +3,8 @@
 #include "board.h"
 #include "hero.h"
 #include "utils.h"
+#include "barrel.h"
+
 
 void GameConfig::run() {
 
@@ -12,9 +14,13 @@ void GameConfig::run() {
 	board.print();
 	Hero mario;
 	mario.setBoard(board);
+	Barrel b1;
+	b1.setBoard(board);
+
 
 	while (true) {
 		mario.draw();
+		b1.draw();
 		if (_kbhit()) {
 			char key = _getch();
 			if (key == GameConfig::ESC) break;
@@ -23,5 +29,7 @@ void GameConfig::run() {
 		Sleep(GameConfig::SLEEP_DURATION);
 		mario.erase();
 		mario.move();
+		b1.erase();
+		b1.move();
 	}
 }

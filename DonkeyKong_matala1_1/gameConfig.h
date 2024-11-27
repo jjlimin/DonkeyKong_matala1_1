@@ -8,6 +8,9 @@ public:
 	static constexpr int START_POS_X = 3;
 	static constexpr int START_POS_Y = 22;
 
+	static constexpr int BARREL_POS_X = 42;
+	static constexpr int BARREL_POS_Y = 6;
+
 	static constexpr int ESC = 27;
 
 	static constexpr int SLEEP_DURATION = 200;

@@ -15,21 +15,39 @@ void Hero::jump() {
 	erase();
 	move();
 	draw();
-	Sleep(GameConfig::SLEEP_DURATION);
+	Sleep(130);
 
 	//land
 	dir.y = 2;
 	erase();
 	move();
 	draw();
-	Sleep(GameConfig::SLEEP_DURATION);
+	Sleep(130);
 }
+
+void Hero::climb() {
+	dir.y = -1;
+	dir.x = 0;
+	while (pBoard->getCharFromOriginal(x, y) != ' ') {
+		erase();
+		move();
+		draw();
+		Sleep(GameConfig::SLEEP_DURATION);
+	}
+	dir.y = 0;
+}
+
 
 void Hero::keyPressed(char key) {
 	for (size_t i = 0; i < numKeys; i++) {
-		if (std::tolower(key) == 'w' && pBoard->getCharFromOriginal(x, y)!= 'H') { // jump if
-			jump();
-			dir.y = 0;
+		if (std::tolower(key) == 'w') {
+			if (pBoard->getCharFromOriginal(x, y) != 'H') {
+				jump();
+				dir.y = 0;
+			}
+			else {
+				climb();
+			}
 			break;
 		}
 		else if (std::tolower(key) == keys[i]) {
@@ -39,18 +57,46 @@ void Hero::keyPressed(char key) {
 	}
 }
 
+
 void Hero::move() {
 	int newX = x + dir.x;
 	int newY = y + dir.y;
-	// Better use a function in Board to check if the new position is valid
-	// + Better use a constant for the wall character
-	if (pBoard->getChar(newX, newY) == 'Q' || pBoard->getChar(newX, newY) == '<' ||
-		pBoard->getChar(newX, newY) == '>' || pBoard->getChar(newX, newY) == '=' ||
-		pBoard->getChar(newX, newY) == '&') {
-		dir = { 0, 0 };
+
+	if (pBoard->getCharFromOriginal(newX, newY + 1) == ' ' && dir.y != -2 ) {
+		dir = { 0,1 };
+	}
+	if (dir.x == -1 || dir.x == 1) {    // a or d
+		if (pBoard->getChar(newX, newY) == 'Q') {
+			dir = { 0,0 };
+			return;
+		}
+	}
+	else if (dir.y == -1) {  // w -climb
+		if (pBoard->getChar(x, y) == ' ') {
+			dir = { 0, 0 };
+		}
+	}
+	else if (dir.y == 1) { // x- down
+		if (pBoard->getChar(newX, newY + 1) == 'H') {
+			erase();
+			x = newX;
+			y = newY;
+			draw();
+		}
+		else if (pBoard->getChar(newX, newY) == '=' || pBoard->getChar(newX, newY) == '>' ||
+			pBoard->getChar(newX, newY) == '<') {
+			dir = { 0, 0 };
+			return;
+		}
 	}
 	else {
-		x = newX;
-		y = newY;
+		if (pBoard->getChar(newX, newY) == 'Q' || pBoard->getChar(newX, newY) == '=' ||
+			pBoard->getChar(newX, newY) == '>' || pBoard->getChar(newX, newY) == '<') {
+			dir = { 0, 0 };
+		}
 	}
+	x = newX;
+    y = newY;
+
 }
+

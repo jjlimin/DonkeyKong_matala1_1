@@ -34,6 +34,7 @@ public:
 	void setBoard(Board& board) { pBoard = &board; }
 	bool checkKindOfUp();
 	void jump();
+	void climb();
 };
 
 
