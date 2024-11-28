@@ -2,8 +2,8 @@
 #include <Windows.h>
 
 bool Hero::checkKindOfUp() { // true- jump, false- climb
-	char ch = pBoard->getCharFromOriginal(x,y);
-	if(ch != 'H'){
+	char ch = pBoard->getCharFromOriginal(x, y);
+	if (ch != 'H') {
 		return true; // jump
 	}
 	return false; // climb
@@ -15,14 +15,13 @@ void Hero::jump() {
 	erase();
 	move();
 	draw();
-	Sleep(130);
+	Sleep(GameConfig::SLEEP_DURATION);
 
 	//land
 	dir.y = 2;
 	erase();
 	move();
 	draw();
-	Sleep(130);
 }
 
 void Hero::climb() {
@@ -62,9 +61,34 @@ void Hero::move() {
 	int newX = x + dir.x;
 	int newY = y + dir.y;
 
-	if (pBoard->getCharFromOriginal(newX, newY + 1) == ' ' && dir.y != -2 ) {
+	if (newX >= GameConfig::MAX_WIDTH - 1 || newY >= GameConfig::MAX_HEIGHT - 1) {
 		dir = { 0,1 };
+
+		if (pBoard->getChar(newX, newY) == 'Q' || pBoard->getChar(newX, newY) == '=' ||
+			pBoard->getChar(newX, newY) == '>' || pBoard->getChar(newX, newY) == '<') {
+			dir = { 0, 0 };
+		}
+
+		x += dir.x;
+		y += dir.y;
+
+		return;
 	}
+
+	if (pBoard->getCharFromOriginal(x, y + 1) == ' ' && dir.y != -2 && dir.y != 2) {
+		dir = { 0,1 };
+
+		if (pBoard->getChar(newX, newY) == 'Q' || pBoard->getChar(newX, newY) == '=' ||
+			pBoard->getChar(newX, newY) == '>' || pBoard->getChar(newX, newY) == '<') {
+			dir = { 0, 0 };
+		}
+
+		x += dir.x;
+		y += dir.y;
+
+		return;
+	}
+
 	if (dir.x == -1 || dir.x == 1) {    // a or d
 		if (pBoard->getChar(newX, newY) == 'Q') {
 			dir = { 0,0 };
@@ -96,7 +120,7 @@ void Hero::move() {
 		}
 	}
 	x = newX;
-    y = newY;
+	y = newY;
 
 }
 
